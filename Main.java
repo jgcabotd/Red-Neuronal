@@ -221,6 +221,7 @@ class Neurona{
         if (this.pesos == null) {
             System.out.println("Error: No hay pesos con los que operar");
         } else {
+            this.sumatoriZ = 0;
             for (int i = 0; i < this.entradas.length; i++) {
                 this.sumatoriZ += this.pesos[i] * this.entradas[i];
             }
