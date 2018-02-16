@@ -193,6 +193,7 @@ class RedNeuronal{
 class Neurona{
     private double[] entradas;
     private double[] pesos;
+    private double umbral;
     private double sumatoriZ;
 
     Neurona(){
@@ -213,6 +214,7 @@ class Neurona{
         for(int i = 0;i<entradas.length;i++){
             this.pesos[i] = Math.random();
         }
+        this.umbral = Math.random();
     }
 
     void sumatoriZ(){
@@ -223,6 +225,7 @@ class Neurona{
             for (int i = 0; i < this.entradas.length; i++) {
                 this.sumatoriZ += this.pesos[i] * this.entradas[i];
             }
+            this.sumatoriZ += this.umbral;
         }
     }
 
@@ -250,6 +253,7 @@ class Neurona{
         for (int i = 0; i < this.pesos.length; i++) {
             this.pesos[i] = this.pesos[i] + e * this.entradas[i];
         }
+        this.umbral = this.umbral + e;
     }
 
     public String toString(){
@@ -263,7 +267,7 @@ class Neurona{
                         " | Peso y" + con + " = " + this.pesos[i];
                 con++;
             }
-            return "\n||Información de la neurona||" + info + "\nSumatorio Z = " + this.sumatoriZ + "\nSalida y = " + getSalidaY("s")+"\n";
+            return "\n||Información de la neurona||" + info + "\nUmbral u = " + this.umbral + "\nSumatorio Z = " + this.sumatoriZ + "\nSalida y = " + getSalidaY("s")+"\n";
         }
     }
 }
