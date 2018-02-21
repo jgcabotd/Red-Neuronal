@@ -3,32 +3,25 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 //        Ejemplo test neurona simple:
-//        double[][] proves = {{6,4},{1},{7,9},{-1},
-//                {5,3},{1},{2,4},{-1},{6,8},{-1},{9,5},{1}};
-//        testNeurona1(proves,50);
+//        double[][] proves = {{6,4},{1},{7,9},{-1},{5,3},{1},{2,4},{-1},{6,8},{-1},{9,5},{1}};
+//        testNeurona1(proves,50,"s");
 
 //        Ejemplo test red neuronal simple:
-        RedNeuronal prova = new RedNeuronal(1, 6, 1);
-        double[][] test = {{6},{2.23},{2},{1.41},{4},{2},{9},{3}};
-
-        //Falta desarrollar entrenamiento.
-        prova.entrenarRed(test,100);
-
-        prova.setEntradasX(new double[]{3});
-        prova.operarNeuronas(true,"i");
-        prova.getSalidasY();
+          double[][] test = {{6},{2.23},{2},{1.41},{4},{2},{9},{3}};
+          testRedNeuronal1(test,50,"i");
     }
 
 //    Testeo de una red neuronal, aunque en este apartado no es funcional aun.
-    public static void testRedNeuronal1(){
-
-        RedNeuronal prova = new RedNeuronal(3, 2, 1);
-
+    public static void testRedNeuronal1(double[][] test,int ciclos,String funAct){
+        //Fase creación de la red neuronal
+        RedNeuronal prova = new RedNeuronal(1, 5, 1);
+        
         //Falta desarrollar entrenamiento.
-        prova.entrenarRed(new double[][]{{4,5},{-1},{6,4},{1},{3,7},{-1},{9,8},{-1}},20);
-
-        prova.setEntradasX(new double[]{3,5,1});
-        prova.operarNeuronas(true,"i");
+        prova.entrenarRed(test,100,funAct);
+        
+        //Fase de testo
+        prova.setEntradasX(new double[]{1});
+        prova.operarNeuronas(true,funAct);
         prova.getSalidasY();
         prova.getN_en();
         prova.getN_oc();
@@ -37,7 +30,7 @@ public class Main {
     }
 
     //Testeo de una neurona simple, que identifique entre dos valores si es mayor o menor.
-    public static void testNeurona1(double[][] proves,int ciclos){
+    public static void testNeurona1(double[][] proves,int ciclos,String funAct){
 
         //Fase de creación de la neurona
         Neurona n1 = new Neurona();
@@ -52,7 +45,7 @@ public class Main {
                 }
                 n1.sumatoriZ();
                 if (n1.getSalidaY("s") != proves[con][0]){
-                    n1.aprendizaje(proves[con][0],n1.getSalidaY("s"));
+                    n1.aprendizaje(proves[con][0],n1.getSalidaY(funAct));
                 }
                 con+=2;
             }
@@ -69,7 +62,7 @@ public class Main {
             double num2 = jo.nextDouble();
             n1.setEntradas(new double[]{num1,num2});
             n1.sumatoriZ();
-            System.out.println("Resultado: "+n1.getSalidaY("s"));
+            System.out.println("Resultado: "+n1.getSalidaY(funAct));
             System.out.println(n1.toString());
         }
     }
@@ -146,16 +139,27 @@ class RedNeuronal{
         }
     }
 
-    void entrenarRed(double[][] ar, int ciclos){
-//        for (int i = 0; i < 100; i++) {
-//            for (int j = 0; j < this.n_en.length; j++) {
-//                this.n_en[j].setEntradas(new double[]{ar[j]});
-//            }
-//            operarNeuronas(true,"s");
-//            for (int k = 0; k < this.n_sa.length; k++) {
-//
-//            }
-//        }
+    void entrenarRed(double[][] ar, int ciclos, String funActi){
+        for (int i = 0; i < ciclos; i++) {
+            for (int j = 0; j < this.n_en.length; j+=2) {
+                for (int k = 0; k < ar[j].length; k++) {
+                    this.n_en[j].setEntradas(new double[]{ar[j][k]});
+                }
+                if (i == 0 && j == 0) {
+                    operarNeuronas(true, funActi);
+                }
+                for (int l = 0; l < this.n_sa.length; l++) {
+                    if (this.n_sa[l].getSalidaY(funActi) != ar[j+1][l]){
+                        aprendizaje(funActi);
+                    }
+                }
+
+            }
+        }
+    }
+
+    void aprendizaje(String funcionAct){
+
     }
 
     void getSalidasY(){
